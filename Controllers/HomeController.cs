@@ -31,9 +31,36 @@ namespace UserManagement.Controllers
             return View();
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int Id)
         {
-            return View();
+            int totalCount = 0, activeCount = 0, inActiveCount = 0;
+            var data = new List<UserDetail>();
+            var userDetails = new UserDetail();
+
+            try
+            {
+                data = _context.UserDetails.ToList();
+
+                if (data != null)
+                {
+                    totalCount = data.Count;
+                    activeCount = data.Where(p => p.IsActive == true).Count();
+                    inActiveCount = data.Where(p => p.IsActive == false).Count();
+
+                    userDetails = data.Where(p => p.Id == Id).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            ViewBag.TotalUserCount = totalCount;
+            ViewBag.ActiveUserCount = activeCount;
+            ViewBag.InActiveUserCount = inActiveCount;
+
+
+            return View(userDetails);
         }
 
         public IActionResult List()
