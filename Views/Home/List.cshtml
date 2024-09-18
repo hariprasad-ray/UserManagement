@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "User List";
+}
+
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h4>User List</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>User Email</th>
+                    <th>Is Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ram</td>
+                    <td>Ram@gmail.com</td>
+                    <td>
+                        <input type="radio" name="isActive1" checked> Yes
+                        <input type="radio" name="isActive1"> No
+                    </td>
+                    <td><a href="#" class="btn btn-warning btn-sm">Update</a></td>
+                </tr>
+                <tr>
+                    <td>Ram2</td>
+                    <td>Ram2@gmail.com</td>
+                    <td>
+                        <input type="radio" name="isActive2" checked> Yes
+                        <input type="radio" name="isActive2"> No
+                    </td>
+                    <td><a href="#" class="btn btn-warning btn-sm">Update</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

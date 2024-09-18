@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        /* Style for count section in the layout */
+        .stats-section {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+
+            .stats-section p {
+                margin: 5px 0;
+                font-size: 16px;
+            }
+
+        .date-section {
+            text-align: right;
+        }
+
+        h2, h3 {
+            font-size: 16px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row stats-section">
+            <div class="col-md-8">
+                <p>Total User Count: @ViewBag.TotalUserCount</p>
+                <p>Total Active Users: @ViewBag.ActiveUserCount</p>
+                <p>Total Inactive User Count: @ViewBag.InActiveUserCount</p>
+            </div>
+            <div class="col-md-3 date-section">
+                <p>Date: @ViewBag.CurrentDate</p>
+            </div>
+        </div>
+
+        <!-- Render all the views-->
+        @RenderBody()
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+ 
