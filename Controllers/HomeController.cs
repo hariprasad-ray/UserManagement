@@ -17,7 +17,7 @@ namespace UserManagement.Controllers
         }
 
         public IActionResult Index()
-        {
+        {           
             return View();
         }
 
@@ -38,7 +38,30 @@ namespace UserManagement.Controllers
 
         public IActionResult List()
         {
-            return View();
+            int totalCount = 0, activeCount = 0, inActiveCount = 0;
+            var data = new List<UserDetail>();
+
+            try
+            {
+                data = _context.UserDetails.ToList();
+
+                if (data != null)
+                {
+                    totalCount = data.Count;
+                    activeCount = data.Where(p => p.IsActive == true).Count();
+                    inActiveCount = data.Where(p => p.IsActive == false).Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            ViewBag.TotalUserCount = totalCount;
+            ViewBag.ActiveUserCount = activeCount;
+            ViewBag.InActiveUserCount = inActiveCount;
+
+            return View(data);
         }
 
 
