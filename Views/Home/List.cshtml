@@ -2,8 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    ViewData["Title"] = "User List - edit";
+    ViewData["Title"] = "User List";
 }
 
 <div class="card">
@@ -21,26 +20,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var user in Model)
+                @foreach (var user in Model)
                 {
                     <tr>
-                        <td>@user.FirstName</td>
+                        <!--link to the username -->
+                        <td><a href="@Url.Action("Details", "Home", new { Id = user.Id })">@user.FirstName</a></td>
                         <td>@user.Email</td>
                         <td>
-                            @{
-                                var isActiveFalg = "";
-                                var isInActiveFalg = "";
-
-                                if (user.IsActive)
-                                    isActiveFalg = "checked";
-                                else
-                                    isInActiveFalg = "checked";
-                            }
-
-                            <input type="radio" name="isActive2" checked> Yes
-                            <input type="radio" name="isActive2"> No
-
-
+                            <input type="radio" name="isActive_@user.Id" value="true" @(user.IsActive ? "checked" : "")> Yes
+                            <input type="radio" name="isActive_@user.Id" value="false" @(!user.IsActive ? "checked" : "")> No
                         </td>
                         <td><a href="#" class="btn btn-warning btn-sm">Update</a></td>
                     </tr>

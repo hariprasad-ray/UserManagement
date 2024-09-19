@@ -37,10 +37,28 @@
             font-size: 16px;
             font-weight: normal;
         }
+
+        /* Style for the buttons */
+        .action-buttons {
+            margin-bottom: 20px;
+        }
+
+            .action-buttons .btn {
+                margin-right: 10px;
+            }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- buttons to Create User and User List -->
+        <div class="row action-buttons">
+            <div class="col-md-12 text-right">
+                <a href="@Url.Action("Create", "Home")" class="btn btn-primary">Create User</a>
+                <a href="@Url.Action("List", "Home")" class="btn btn-primary">User List</a>
+            </div>
+        </div>
+
+        <!-- User stats section -->
         <div class="row stats-section">
             <div class="col-md-8">
                 <p>Total User Count: @ViewBag.TotalUserCount</p>
@@ -52,14 +70,12 @@
             </div>
         </div>
 
-        <!-- Render all the views-->
+        <!-- Render all the views -->
         @RenderBody()
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
 </body>
 </html>
-
- 
