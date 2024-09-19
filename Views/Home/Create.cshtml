@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -14,8 +12,12 @@
     <div class="card-body">
         <form>
             <div class="mb-3">
-                <label for="username" class="form-label">User Name</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter user name">
+                <label for="firstname" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstname" placeholder="Enter first name">
+            </div>
+            <div class="mb-3">
+                <label for="lastname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
             </div>
             <div class="mb-3">
                 <label for="useremail" class="form-label">User Email</label>
@@ -28,11 +30,51 @@
             <div class="mb-3">
                 <label class="form-label">Is Active</label>
                 <div>
-                    <input type="radio" name="isactive" id="activeYes" value="Yes"> <label for="activeYes">Yes</label>
-                    <input type="radio" name="isactive" id="activeNo" value="No" class="ms-3"> <label for="activeNo">No</label>
+                    <input type="radio" name="isactive" id="activeYes" value="True"> <label for="activeYes">Yes</label>
+                    <input type="radio" name="isactive" id="activeNo" value="False" class="ms-3"> <label for="activeNo">No</label>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="createUser" onclick="saveUser()">Create</button>
         </form>
+
+        <span id="statusMsg" style="color:green"></span>
+
     </div>
 </div>
+
+
+
+
+<script>
+
+    function saveUser() {
+    
+        var selected = $("input[type='radio'][name='isactive']:checked");
+
+        var userData = {
+            firstName : $("#firstname").val(),
+            lastName : $("#lastname").val(),
+            email : $("#useremail").val(),
+            address : $("#useraddress").val(),
+            isActive : selected.length > 0 ? selected.val() : 0
+        }
+
+        //add validation at script level
+
+        $.ajax({
+
+            url: '@Url.Action("Create", "Home")',
+            type: "POST",
+            data: userData,
+            success: function (response) {            
+                $('#statusMsg').text('User added successfully !'); //make sure it stays for 5 sec, with out appending                
+            },
+            error: function (request, status, error) {
+                $('#statusMsg').text('User creation failed, please trye again !'); //make sure it stays for 5 sec, with out appending
+            }
+        });
+
+    }
+
+
+</script>

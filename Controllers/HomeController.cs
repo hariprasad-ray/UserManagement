@@ -17,7 +17,7 @@ namespace UserManagement.Controllers
         }
 
         public IActionResult Index()
-        {           
+        {
             return View();
         }
 
@@ -26,9 +26,30 @@ namespace UserManagement.Controllers
             return View();
         }
 
+
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult Create(UserDetail userDetail)
+        {
+            bool status = false;
+
+            try
+            {
+                _context.UserDetails.Add(userDetail);
+                _context.SaveChanges();
+
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return Json(status);
         }
 
         public IActionResult Details(int Id)
