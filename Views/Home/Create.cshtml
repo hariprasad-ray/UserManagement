@@ -61,16 +61,26 @@
 
         //add validation at script level
 
+        if (!userData.firstName || !userData.lastName || !userData.email || !userData.address) {
+            $('#statusMsg').text('All fields are required').show().delay(5000).fadeOut();
+            return;
+        }
         $.ajax({
 
             url: '@Url.Action("Create", "Home")',
             type: "POST",
             data: userData,
             success: function (response) {            
-                $('#statusMsg').text('User added successfully !'); //make sure it stays for 5 sec, with out appending                
+                $('#statusMsg').text('User added successfully !').show().delay(5000).fadeOut(); 
+                //make sure it stays for 5 sec, with out appending
+                $("#firstname").val('');
+                $("#lastname").val('');
+                $("#useremail").val('');
+                $("#useraddress").val('');
+                $("input[type='radio'][name='isactive']").prop('checked', false);
             },
             error: function (request, status, error) {
-                $('#statusMsg').text('User creation failed, please trye again !'); //make sure it stays for 5 sec, with out appending
+                $('#statusMsg').text('User creation failed, please trye again !').show().delay(5000).fadeOut(); //make sure it stays for 5 sec, with out appending
             }
         });
 
