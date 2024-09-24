@@ -3,6 +3,9 @@
 <head>
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
 
     <style>
         body {
@@ -62,8 +65,8 @@
         <div class="row stats-section">
             <div class="col-md-8">
                 <p>Total User Count: @ViewBag.TotalUserCount</p>
-                <p>Total Active Users: @ViewBag.ActiveUserCount</p>
-                <p>Total Inactive User Count: @ViewBag.InActiveUserCount</p>
+                <p>Total Active Users: <span id="activecount">@ViewBag.ActiveUserCount</span></p>
+                <p>Total Inactive User Count: <span id="inactivecount">@ViewBag.InActiveUserCount</span></p>
             </div>
             <div class="col-md-3 date-section">
                 <p>Date: @DateTime.Now</p>
@@ -74,8 +77,6 @@
         @RenderBody()
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
+   
 </body>
 </html>

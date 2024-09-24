@@ -5,6 +5,9 @@
     ViewData["Title"] = "User List";
 }
 
+
+
+
 <div class="card">
     <div class="card-header bg-success text-white">
         <h4>User List</h4>
@@ -27,13 +30,58 @@
                         <td><a href="@Url.Action("Details", "Home", new { Id = user.Id })">@user.FirstName</a></td>
                         <td>@user.Email</td>
                         <td>
-                            <input type="radio" name="isActive_@user.Id" value="true" @(user.IsActive ? "checked" : "")> Yes
-                            <input type="radio" name="isActive_@user.Id" value="false" @(!user.IsActive ? "checked" : "")> No
+                            <input type="radio" name="isactive_@user.Id" value="True" @(user.IsActive ? "checked" : "")> Yes
+                            <input type="radio" name="isactive_@user.Id" value="False" @(!user.IsActive ? "checked" : "")> No
                         </td>
-                        <td><a href="#" class="btn btn-warning btn-sm">Update</a></td>
+                        <td><button class="btn btn-warning btn-sm userupdate" data-userId="@user.Id">Update</button></td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        $(".userupdate").on('click', function () {
+
+            var userId = $(this).attr("data-userId");
+            var selected = $(`input[type='radio'][name='isactive_${userId}']:checked`).val();
+
+            var userData = {
+                id: $(this).attr("data-userId"),
+                isActive: selected
+            }
+
+            $.ajax({
+
+                url: '@Url.Action("Update", "Home")',
+                type: "POST",
+                data: userData,
+                success: function (response) {
+                    
+                    if (response.status) {
+                        $('#activecount').text(response.activecount);
+                        $('#inactivecount').text(response.inactivecount);
+                        alert('User updated successfully !');
+                        @* location.reload(); *@
+                    }
+                    else { 
+                        alert('User updation failed, please try again !');
+                    }                    
+                },
+                error: function (request, status, error) {
+                    alert('User updation failed, please try again !');
+                }
+            });
+        });
+    });
+
+
+
+</script>

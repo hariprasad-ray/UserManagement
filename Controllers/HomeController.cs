@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.Data;
 using System.Diagnostics;
 using UserManagement.Models;
 
@@ -86,6 +88,40 @@ namespace UserManagement.Controllers
 
         public IActionResult List()
         {
+            #region sample ADO.Net code
+            try
+            {
+                //string ConnectionString = @"Data Source=DESKTOP-MDKAEQ4\SQLEXPRESS;Initial Catalog=UserManagement; User Id=sa; Password=Ind_Sql@sa2024;TrustServerCertificate=True;";
+                //using (SqlConnection connection = new SqlConnection(ConnectionString))
+                //{
+                //    connection.Open();
+                //    //Create the SqlDataAdapter instance by specifying the command text and connection object
+                //    SqlDataAdapter dataAdapter = new SqlDataAdapter("select * from UserDetails;", connection);
+
+                //    //Creating DataSet Object
+                //    DataSet dataSet = new DataSet();
+
+                //    //Filling the DataSet using the Fill Method of SqlDataAdapter object
+                //    //Here, we have not specified the data table name and the data table will be created at index position 0
+                //    dataAdapter.Fill(dataSet);
+
+                //    //Iterating through the DataSet 
+                //    //First fetch the Datatable from the dataset and then fetch the rows using the Rows property of Datatable
+                //    foreach (DataRow row in dataSet.Tables[0].Rows)
+                //    {                       
+                //        //Accessing the Data using the integer index position as key
+                //        //Console.WriteLine(row["Id"] + ",  " + row["Name"] + ",  " + row["Mobile"]);
+                //    }
+                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Occurred: {ex.Message}");
+            }
+            #endregion
+
+
+            #region EF 
             int totalCount = 0, activeCount = 0, inActiveCount = 0;
             var data = new List<UserDetail>();
 
@@ -110,6 +146,40 @@ namespace UserManagement.Controllers
             ViewBag.InActiveUserCount = inActiveCount;
 
             return View(data);
+            #endregion
+        }
+
+
+        [HttpPost]
+        public JsonResult Update(UserDetail userDetail)
+        {
+            bool status = false;
+            var activeCount = 0;
+            var inActiveCount = 0;
+
+            try
+            { 
+                if (userDetail != null && userDetail.Id > 0)
+                {
+                    var user = _context.UserDetails.Where(p => p.Id == userDetail.Id).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.IsActive = userDetail.IsActive;
+                    }
+                    _context.SaveChanges();
+
+                     activeCount = _context.UserDetails.Where(p => p.IsActive == true).Count();
+                     inActiveCount = _context.UserDetails.Where(p => p.IsActive == false).Count();
+
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return Json(new { status = status, activecount = activeCount, inactivecount = inActiveCount });
         }
 
 
