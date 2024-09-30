@@ -182,6 +182,35 @@ namespace UserManagement.Controllers
             return Json(new { status = status, activecount = activeCount, inactivecount = inActiveCount });
         }
 
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            bool status = false;
+            var activeCount = 0;
+            var inActiveCount = 0;
+
+            try
+            {
+                var user = _context.UserDetails.Where(p => p.Id == id).FirstOrDefault();
+                if (user != null)
+                {
+                    _context.UserDetails.Remove(user);
+                    _context.SaveChanges();
+
+                    activeCount = _context.UserDetails.Where(p => p.IsActive == true).Count();
+                    inActiveCount = _context.UserDetails.Where(p => p.IsActive == false).Count();
+
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return Json(new { status = status, activecount = activeCount, inactivecount = inActiveCount });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
