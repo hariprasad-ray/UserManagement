@@ -5,9 +5,6 @@
     ViewData["Title"] = "User List";
 }
 
-
-
-
 <div class="card">
     <div class="card-header bg-success text-white">
         <h4>User List</h4>
@@ -33,7 +30,9 @@
                             <input type="radio" name="isactive_@user.Id" value="True" @(user.IsActive ? "checked" : "")> Yes
                             <input type="radio" name="isactive_@user.Id" value="False" @(!user.IsActive ? "checked" : "")> No
                         </td>
-                        <td><button class="btn btn-warning btn-sm userupdate" data-userId="@user.Id">Update</button></td>
+                        <td><button class="btn btn-warning btn-sm userupdate" data-userId="@user.Id">Update</button>
+                            <button class="btn btn-danger btn-sm userdelete" data-userId="@user.Id">Delete</button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -44,8 +43,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
 <script>
-
-
     $(document).ready(function () {
 
         $(".userupdate").on('click', function () {
@@ -93,7 +90,6 @@
             });
         });
     });
-
 
 
 </script>
