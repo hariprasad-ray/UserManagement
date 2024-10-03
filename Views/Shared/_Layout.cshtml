@@ -64,9 +64,9 @@
         <!-- User stats section -->
         <div class="row stats-section">
             <div class="col-md-8">
-                <p>Total User Count: @ViewBag.TotalUserCount</p>
-                <p>Total Active Users: <span id="activecount">@ViewBag.ActiveUserCount</span></p>
-                <p>Total Inactive User Count: <span id="inactivecount">@ViewBag.InActiveUserCount</span></p>
+                <p>Total User Count: <span id="totalcount"></span></p>
+                <p>Total Active Users: <span id="activecount"></span></p>
+                <p>Total Inactive User Count: <span id="inactivecount"></span></p>
             </div>
             <div class="col-md-3 date-section">
                 <p>Date: @DateTime.Now</p>
@@ -80,3 +80,25 @@
    
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            url: 'https://localhost:7153/api/Home/GetUserCount',
+            type: "GET",           
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                
+                if(data != null)
+                {
+                    $('#activecount').text(data.activeUserCount);
+                    $('#inactivecount').text(data.inActiveUserCount);
+                    $('#totalcount').text(data.totalUserCount);
+                }
+            }
+        });
+
+    });
+</script>

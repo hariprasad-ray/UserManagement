@@ -66,10 +66,22 @@
                 success: function (response) {
                     
                     if (response.status) {
-                        $('#activecount').text(response.activecount);
-                        $('#inactivecount').text(response.inactivecount);
+
+                        $.ajax({
+                            url: 'https://localhost:7153/api/Home/GetUserCount',
+                            type: "GET",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+
+                                if (data != null) {
+                                    $('#activecount').text(data.activeUserCount);
+                                    $('#inactivecount').text(data.inActiveUserCount);
+                                }
+                            }
+                        });
+
                         alert('User updated successfully !');
-                        @* location.reload(); *@
                     }
                     else { 
                         alert('User updation failed, please try again !');

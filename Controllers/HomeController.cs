@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Diagnostics;
 using UserManagement.Models;
@@ -56,7 +57,7 @@ namespace UserManagement.Controllers
 
         public IActionResult Details(int Id)
         {
-            int totalCount = 0, activeCount = 0, inActiveCount = 0;
+          
             var data = new List<UserDetail>();
             var userDetails = new UserDetail();
 
@@ -65,23 +66,14 @@ namespace UserManagement.Controllers
                 data = _context.UserDetails.ToList();
 
                 if (data != null)
-                {
-                    totalCount = data.Count;
-                    activeCount = data.Where(p => p.IsActive == true).Count();
-                    inActiveCount = data.Where(p => p.IsActive == false).Count();
-
+                {                    
                     userDetails = data.Where(p => p.Id == Id).FirstOrDefault();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-            }
-
-            ViewBag.TotalUserCount = totalCount;
-            ViewBag.ActiveUserCount = activeCount;
-            ViewBag.InActiveUserCount = inActiveCount;
-
+            }          
 
             return View(userDetails);
         }
@@ -112,7 +104,7 @@ namespace UserManagement.Controllers
                 //        //Accessing the Data using the integer index position as key
                 //        //Console.WriteLine(row["Id"] + ",  " + row["Name"] + ",  " + row["Mobile"]);
                 //    }
-                //}
+                //}               
             }
             catch (Exception ex)
             {
@@ -122,28 +114,16 @@ namespace UserManagement.Controllers
 
 
             #region EF 
-            int totalCount = 0, activeCount = 0, inActiveCount = 0;
             var data = new List<UserDetail>();
 
             try
             {
-                data = _context.UserDetails.ToList();
-
-                if (data != null)
-                {
-                    totalCount = data.Count;
-                    activeCount = data.Where(p => p.IsActive == true).Count();
-                    inActiveCount = data.Where(p => p.IsActive == false).Count();
-                }
+                data = _context.UserDetails.ToList(); //linq queries                
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
-
-            ViewBag.TotalUserCount = totalCount;
-            ViewBag.ActiveUserCount = activeCount;
-            ViewBag.InActiveUserCount = inActiveCount;
 
             return View(data);
             #endregion
@@ -154,11 +134,9 @@ namespace UserManagement.Controllers
         public JsonResult Update(UserDetail userDetail)
         {
             bool status = false;
-            var activeCount = 0;
-            var inActiveCount = 0;
 
             try
-            { 
+            {
                 if (userDetail != null && userDetail.Id > 0)
                 {
                     var user = _context.UserDetails.Where(p => p.Id == userDetail.Id).FirstOrDefault();
@@ -166,10 +144,8 @@ namespace UserManagement.Controllers
                     {
                         user.IsActive = userDetail.IsActive;
                     }
-                    _context.SaveChanges();
 
-                     activeCount = _context.UserDetails.Where(p => p.IsActive == true).Count();
-                     inActiveCount = _context.UserDetails.Where(p => p.IsActive == false).Count();
+                    _context.SaveChanges();
 
                     status = true;
                 }
@@ -179,14 +155,66 @@ namespace UserManagement.Controllers
                 _logger.LogError(ex.Message);
             }
 
-            return Json(new { status = status, activecount = activeCount, inactivecount = inActiveCount });
+            return Json(new { status = status });
         }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+
+            //LINQ - Database, object, XML, entities
+
+            var searchText = "Ram";
+
+            //Select * from UserDetails where FirstName = 'Ram' AND LastName = 'M' Orderby LastName desc
+            var data = _context.UserDetails.Where(p => p.FirstName == "Ram" && p.LastName == "M").ToList();
+
+            //Ramraj- contains
+            var data2 = _context.UserDetails.Where(p => searchText.Contains(p.FirstName)).ToList();
+
+            //Orderby
+            var data3 = _context.UserDetails.Where(p => p.IsActive == true).OrderByDescending(p => p.LastName).ToList();
+
+            //Group by
+            var results = from p in _context.UserDetails
+                          group p.IsActive by p.Id into g
+                          select new { UserId = g.Key, Details = g.ToList() };
+
+            //Joins
+            var id = 1;
+
+            List<StudentDetails> studentDetails = new List<StudentDetails>() { new StudentDetails { StudentId = 1, StudentName = "Ram" } };
+            List<StudentAddress> StudentAddress = new List<StudentAddress>() { new StudentAddress { StudentId = 1, Address = "HYD" } };
+
+            var query =
+               (from post in studentDetails
+                join meta in StudentAddress on post.StudentId equals meta.StudentId
+                where post.StudentId == id
+                select new 
+                {
+                    Post = post,
+                    Address = meta.Address
+
+                }).ToList();
+
+
+            //select new { Post = post, Meta = meta };
+
+
+
+            //C# objects
+            List<string> errors = new List<string>() { "Ram", "Raj" };
+            var data4 = errors.Where(p => p == "Ram").OrderByDescending(p => p);
+
+            List<ErrorViewModel> errors2 = new List<ErrorViewModel>();
+            errors2.Where(p => p.RequestId == "").ToList();
+
+
+
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
